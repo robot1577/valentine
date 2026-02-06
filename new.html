@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine Proposal</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff4d6d, #ff99ac, #ffd6e0);
+    }
+
+    /* Floating hearts */
+    .heart {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  animation: floatUp 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    .container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 10;
+  min-width: 420px;
+}
+
+    h1 {
+      color: white;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    }
+
+    p {
+      color: white;
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+      position: absolute;
+    }
+
+    /* Next Button */
+    #nextBtn {
+      position: relative;
+      background: #ff2e63;
+      color: white;
+    }
+
+    #nextBtn:hover {
+      background: #e6004c;
+      transform: scale(1.05);
+    }
+
+    /* Valentine Buttons Boundary */
+    .btn-area {
+      position: relative;
+      width: 380px;
+      height: 180px;
+      margin: 0 auto;
+      margin-top: 20px;
+      border-radius: 20px;
+    }
+
+    #yesBtn {
+      background: #28a745;
+      color: white;
+      left: 40px;
+      top: 55px;
+      position: absolute;
+    }
+
+    #yesBtn:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
+
+    #noBtn {
+      background: #dc3545;
+      color: white;
+      left: 200px;
+      top: 55px;
+      position: absolute;
+      transition: left 0.5s ease, top 0.5s ease;
+    }
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 999;
+      opacity: 0;
+      transition: 0.4s ease-in-out;
+    }
+
+    .popup.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    .popup h2 {
+      margin: 0;
+      font-size: 28px;
+      color: #ff2e63;
+    }
+
+    .popup p {
+      font-size: 18px;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .popup button {
+      margin-top: 15px;
+      background: #ff2e63;
+      color: white;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .popup button:hover {
+      background: #e6004c;
+    }
+
+    .dialog {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        padding: 20px 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        z-index: 9999;   /* UPDATED */
+        text-align: center;
+        display: none;
+        animation: shake 0.4s;
+        }
+
+        .dialog p {
+        margin: 10px 0;
+        color: #333;
+        font-size: 16px;
+        }
+
+
+    @keyframes shake {
+      0% { transform: translateX(-50%) translateX(0px); }
+      25% { transform: translateX(-50%) translateX(-8px); }
+      50% { transform: translateX(-50%) translateX(8px); }
+      75% { transform: translateX(-50%) translateX(-8px); }
+      100% { transform: translateX(-50%) translateX(0px); }
+    }
+
+    .dialog h3 {
+      margin: 0;
+      color: #dc3545;
+    }
+
+    .dialog button {
+      margin-top: 12px;
+      padding: 8px 14px;
+      font-size: 15px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #dc3545;
+      color: white;
+      position: relative;
+    }
+
+    .dialog button:hover {
+      background: #b52a37;
+    }
+
+    /* Hide second page initially */
+    #valentinePage {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PAGE 1 -->
+  <div class="container" id="introPage">
+    <h1>Hey Sanjana ❤️</h1>
+    <p>
+      I have a question for you... and it's important 😳<br>
+      Please click on <b>Next</b>.
+    </p>
+    <button id="nextBtn">Next ➝</button>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="container" id="valentinePage">
+    <h1>Sanjana, will you be my valentine? ❤️</h1>
+
+    <div class="btn-area" id="btnArea">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 💔</button>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <h2>YAYYYYY!!! 🎉💘</h2>
+    <p>Congratulations 😭❤️<br>Satyam is your Valentine now 💍</p>
+    <button onclick="closePopup()">Aww okay 💕</button>
+  </div>
+
+  <!-- Fake Dialog -->
+  <div class="dialog" id="dialog">
+    <h3>Are you sure? 😈</h3>
+    <p>No is not an option 😤💔</p>
+    <button onclick="closeDialog()">Okay 😭</button>
+  </div>
+
+  <!-- Music -->
+  <audio id="bgMusic" loop>
+    <source src="rabta.mp3" type="audio/mpeg">
+  </audio>
+
+
+
+  <script>
+    const introPage = document.getElementById("introPage");
+    const valentinePage = document.getElementById("valentinePage");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const popup = document.getElementById("popup");
+    const dialog = document.getElementById("dialog");
+    const bgMusic = document.getElementById("bgMusic");
+    const btnArea = document.getElementById("btnArea");
+
+    // Start hearts always
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
+
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+      heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
+    }
+
+    setInterval(createHeart, 300);
+
+    // Move NO inside boundary and avoid overlapping YES
+    function moveNoButtonInsideBoundary() {
+      const boundaryRect = btnArea.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
+
+      const padding = 10;
+
+      const maxX = boundaryRect.width - noRect.width - padding;
+      const maxY = boundaryRect.height - noRect.height - padding;
+
+      let tries = 0;
+
+      while (tries < 50) {
+        const randomX = Math.floor(Math.random() * maxX) + padding;
+        const randomY = Math.floor(Math.random() * maxY) + padding;
+
+        const futureNoRect = {
+          left: boundaryRect.left + randomX,
+          top: boundaryRect.top + randomY,
+          right: boundaryRect.left + randomX + noRect.width,
+          bottom: boundaryRect.top + randomY + noRect.height
+        };
+
+        const yesBox = {
+          left: yesRect.left,
+          top: yesRect.top,
+          right: yesRect.right,
+          bottom: yesRect.bottom
+        };
+
+        const isOverlapping =
+          !(futureNoRect.right < yesBox.left ||
+            futureNoRect.left > yesBox.right ||
+            futureNoRect.bottom < yesBox.top ||
+            futureNoRect.top > yesBox.bottom);
+
+        if (!isOverlapping) {
+          noBtn.style.left = randomX + "px";
+          noBtn.style.top = randomY + "px";
+          return;
+        }
+
+        tries++;
+      }
+
+      noBtn.style.left = maxX + "px";
+      noBtn.style.top = padding + "px";
+    }
+
+    function showDialog() {
+      dialog.style.display = "block";
+      setTimeout(() => {
+        dialog.style.display = "none";
+      }, 1200);
+    }
+
+    function closeDialog() {
+      dialog.style.display = "none";
+    }
+
+    function closePopup() {
+      popup.classList.remove("show");
+    }
+
+    // Start music only when NEXT is clicked
+    nextBtn.addEventListener("click", () => {
+  bgMusic.currentTime = 15;   // start from 1:05
+  bgMusic.volume = 0.5;
+  bgMusic.play();
+
+  introPage.style.display = "none";
+  valentinePage.style.display = "block";
+});
+
+    noBtn.addEventListener("mouseover", () => {
+      showDialog();
+      moveNoButtonInsideBoundary();
+    });
+
+    noBtn.addEventListener("click", () => {
+      showDialog();
+      moveNoButtonInsideBoundary();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      popup.classList.add("show");
+
+      for (let i = 0; i < 30; i++) {
+        createHeartBurst();
+      }
+
+      noBtn.style.display = "none";
+      yesBtn.style.display = "none";
+    });
+
+    // Burst hearts on Yes click
+    function createHeartBurst() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "💖";
+
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      heart.style.left = centerX + "px";
+      heart.style.top = centerY + "px";
+      heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+      heart.style.position = "fixed";
+
+      document.body.appendChild(heart);
+
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = Math.random() * 250 + 50;
+
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+
+      heart.animate([
+        { transform: "translate(0,0)", opacity: 1 },
+        { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+      ], {
+        duration: 1200,
+        easing: "ease-out"
+      });
+
+      setTimeout(() => {
+        heart.remove();
+      }, 1300);
+    }
+  </script>
+
+</body>
+</html>
